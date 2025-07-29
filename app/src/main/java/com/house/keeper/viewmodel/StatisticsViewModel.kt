@@ -37,9 +37,10 @@ class StatisticsViewModel @Inject constructor(
                 transactionRepository.getAllTransactions(),
                 categoryRepository.getAllCategories()
             ) { transactions, categories ->
+                val currentState = _uiState.value
                 val filteredTransactions = getTransactionsInPeriod(transactions)
-                
-                StatisticsUiState(
+
+                currentState.copy(
                     transactions = filteredTransactions,
                     categories = categories,
                     monthlyData = calculateMonthlyData(filteredTransactions),
@@ -57,8 +58,9 @@ class StatisticsViewModel @Inject constructor(
     private fun getTransactionsInPeriod(transactions: List<Transaction>): List<Transaction> {
         val state = _uiState.value
         val now = Date()
-        
-        return when (state.selectedPeriod) {
+
+        // 首先按时间段筛选
+        val periodFilteredTransactions = when (state.selectedPeriod) {
             StatisticsPeriod.THIS_MONTH -> {
                 val startOfMonth = DateUtils.getStartOfMonth(now)
                 val endOfMonth = DateUtils.getEndOfMonth(now)
@@ -77,6 +79,13 @@ class StatisticsViewModel @Inject constructor(
                 transactions.filter { it.date >= startOfYear && it.date <= endOfYear }
             }
             StatisticsPeriod.ALL_TIME -> transactions
+        }
+
+        // 然后按交易类型筛选
+        return if (state.selectedTransactionType != null) {
+            periodFilteredTransactions.filter { it.type == state.selectedTransactionType }
+        } else {
+            periodFilteredTransactions
         }
     }
     
