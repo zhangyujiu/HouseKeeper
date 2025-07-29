@@ -16,7 +16,7 @@ import com.house.keeper.ui.navigation.Screen
 fun BottomNavigationBar(navController: NavController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    
+
     NavigationBar {
         Screen.bottomNavItems.forEach { screen ->
             NavigationBarItem(
@@ -34,17 +34,32 @@ fun BottomNavigationBar(navController: NavController) {
                         fontSize = 12.sp
                     )
                 },
-                selected = currentRoute == screen.route,
+                selected = when (screen.route) {
+                    Screen.Record.route -> {
+                        // 记账页面需要匹配带参数的路由
+                        currentRoute == screen.route || currentRoute?.startsWith("${screen.route}?") == true
+                    }
+                    else -> currentRoute == screen.route
+                },
                 onClick = {
-                    navController.navigate(screen.route) {
-                        // 清除回退栈到首页，避免栈积累
-                        popUpTo(Screen.Home.route) {
-                            saveState = true
+                    val isCurrentlySelected = when (screen.route) {
+                        Screen.Record.route -> {
+                            currentRoute == screen.route || currentRoute?.startsWith("${screen.route}?") == true
                         }
-                        // 避免重复创建相同的destination
-                        launchSingleTop = true
-                        // 恢复状态
-                        restoreState = true
+                        else -> currentRoute == screen.route
+                    }
+
+                    if (!isCurrentlySelected) {
+                        navController.navigate(screen.route) {
+                            // 清除回退栈到首页，避免栈积累
+                            popUpTo(Screen.Home.route) {
+                                saveState = true
+                            }
+                            // 避免重复创建相同的destination
+                            launchSingleTop = true
+                            // 恢复状态
+                            restoreState = true
+                        }
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
