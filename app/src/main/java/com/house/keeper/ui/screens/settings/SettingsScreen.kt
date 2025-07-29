@@ -1,6 +1,8 @@
 package com.house.keeper.ui.screens.settings
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,15 +14,41 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.house.keeper.ui.theme.HouseKeeperTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(navController: NavController) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize()
     ) {
+        // 顶部应用栏
+        TopAppBar(
+            title = {
+                Text(
+                    text = "设置",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = { navController.popBackStack() }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "返回"
+                    )
+                }
+            },
+            windowInsets = WindowInsets(0, 0, 0, 0)
+        )
+
+        // 设置内容
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
         Text(
             text = "⚙️",
             style = MaterialTheme.typography.displayLarge
@@ -41,6 +69,7 @@ fun SettingsScreen(navController: NavController) {
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+        }
     }
 }
 

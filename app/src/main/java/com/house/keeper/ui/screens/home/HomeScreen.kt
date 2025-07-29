@@ -94,7 +94,7 @@ fun HomeScreen(
                 
                 TextButton(
                     onClick = {
-                        navController.navigate(Screen.Statistics.route)
+                        navController.navigate(Screen.Transactions.route)
                     }
                 ) {
                     Text("查看全部")

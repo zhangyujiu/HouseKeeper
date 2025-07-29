@@ -36,15 +36,15 @@ fun BottomNavigationBar(navController: NavController) {
                 },
                 selected = currentRoute == screen.route,
                 onClick = {
-                    if (currentRoute != screen.route) {
-                        navController.navigate(screen.route) {
-                            // 避免重复导航到同一个页面
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
+                    navController.navigate(screen.route) {
+                        // 清除回退栈到首页，避免栈积累
+                        popUpTo(Screen.Home.route) {
+                            saveState = true
                         }
+                        // 避免重复创建相同的destination
+                        launchSingleTop = true
+                        // 恢复状态
+                        restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(

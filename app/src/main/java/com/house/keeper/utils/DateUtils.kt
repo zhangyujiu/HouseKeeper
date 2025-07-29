@@ -111,4 +111,9 @@ object DateUtils {
         val today = Date()
         return formatYear(date) == formatYear(today)
     }
+
+    fun formatMonthYear(date: Date): String {
+        val formatter = SimpleDateFormat("yyyy年MM月", Locale.getDefault())
+        return formatter.format(date)
+    }
 }
