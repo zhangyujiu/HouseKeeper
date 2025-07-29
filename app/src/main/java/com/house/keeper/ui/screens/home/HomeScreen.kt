@@ -63,17 +63,17 @@ fun HomeScreen(
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        navController.navigate(Screen.Record.route)
+                        navController.navigate("${Screen.Record.route}?type=INCOME")
                     }
                 )
-                
+
                 QuickActionButton(
                     text = "支出",
                     icon = "💸",
                     color = MaterialTheme.colorScheme.error,
                     modifier = Modifier.weight(1f),
                     onClick = {
-                        navController.navigate(Screen.Record.route)
+                        navController.navigate("${Screen.Record.route}?type=EXPENSE")
                     }
                 )
             }
@@ -148,7 +148,7 @@ fun HomeScreen(
                 RecentTransactionItem(
                     transaction = transaction,
                     onClick = {
-                        // TODO: 导航到交易详情页面
+                        navController.navigate("transaction_detail/${transaction.id}")
                     }
                 )
             }

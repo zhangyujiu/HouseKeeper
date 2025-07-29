@@ -13,6 +13,7 @@ import com.house.keeper.ui.screens.record.EditTransactionScreen
 import com.house.keeper.ui.screens.record.RecordScreen
 import com.house.keeper.ui.screens.statistics.StatisticsScreen
 import com.house.keeper.ui.screens.settings.SettingsScreen
+import com.house.keeper.ui.screens.transactions.TransactionDetailScreen
 import com.house.keeper.ui.screens.transactions.TransactionListScreen
 
 @Composable
@@ -29,8 +30,19 @@ fun AppNavigation(
             HomeScreen(navController = navController)
         }
         
-        composable(Screen.Record.route) {
-            RecordScreen(navController = navController)
+        composable(
+            route = "${Screen.Record.route}?type={type}",
+            arguments = listOf(navArgument("type") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val transactionType = backStackEntry.arguments?.getString("type")
+            RecordScreen(
+                navController = navController,
+                presetTransactionType = transactionType
+            )
         }
 
         composable(
@@ -39,6 +51,17 @@ fun AppNavigation(
         ) { backStackEntry ->
             val transactionId = backStackEntry.arguments?.getLong("transactionId") ?: 0L
             EditTransactionScreen(
+                navController = navController,
+                transactionId = transactionId
+            )
+        }
+
+        composable(
+            route = "transaction_detail/{transactionId}",
+            arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val transactionId = backStackEntry.arguments?.getLong("transactionId") ?: 0L
+            TransactionDetailScreen(
                 navController = navController,
                 transactionId = transactionId
             )

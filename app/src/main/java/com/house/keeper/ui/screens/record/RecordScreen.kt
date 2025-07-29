@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.house.keeper.data.database.entities.TransactionType
 import com.house.keeper.ui.components.CategorySelector
 import com.house.keeper.ui.components.SimpleDatePickerDialog
 import com.house.keeper.ui.components.TransactionTypeToggle
@@ -34,11 +35,22 @@ import java.util.Date
 @Composable
 fun RecordScreen(
     navController: NavController,
+    presetTransactionType: String? = null,
     viewModel: RecordViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var showDatePicker by remember { mutableStateOf(false) }
+
+    // 处理预设交易类型
+    LaunchedEffect(presetTransactionType) {
+        presetTransactionType?.let { type ->
+            when (type) {
+                "INCOME" -> viewModel.updateTransactionType(TransactionType.INCOME)
+                "EXPENSE" -> viewModel.updateTransactionType(TransactionType.EXPENSE)
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
