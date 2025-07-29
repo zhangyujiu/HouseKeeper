@@ -162,6 +162,18 @@ class CalendarViewModel @Inject constructor(
         val expense = transactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount }
         return Pair(income, expense)
     }
+
+    fun deleteTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            try {
+                transactionRepository.deleteTransaction(transaction)
+                // 重新加载数据
+                loadCalendarData()
+            } catch (e: Exception) {
+                // TODO: 处理错误
+            }
+        }
+    }
 }
 
 data class CalendarUiState(

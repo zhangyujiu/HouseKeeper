@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.house.keeper.ui.components.MonthCalendar
-import com.house.keeper.ui.components.TransactionListItem
+import com.house.keeper.ui.components.SwipeableTransactionItem
 import com.house.keeper.ui.theme.HouseKeeperTheme
 import com.house.keeper.utils.CurrencyUtils
 import com.house.keeper.utils.DateUtils
@@ -248,13 +248,13 @@ fun CalendarScreen(
                                         verticalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         uiState.selectedDateTransactions.forEach { transaction ->
-                                            TransactionListItem(
+                                            SwipeableTransactionItem(
                                                 transaction = transaction,
                                                 onEdit = {
                                                     navController.navigate("edit_transaction/${transaction.id}")
                                                 },
                                                 onDelete = {
-                                                    // TODO: 实现删除功能
+                                                    viewModel.deleteTransaction(it)
                                                 }
                                             )
                                         }

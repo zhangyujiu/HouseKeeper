@@ -18,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.house.keeper.data.database.entities.TransactionType
-import com.house.keeper.ui.components.TransactionListItem
+import com.house.keeper.ui.components.SwipeableTransactionItem
 import com.house.keeper.ui.theme.HouseKeeperTheme
 import com.house.keeper.viewmodel.TransactionListViewModel
 
@@ -235,7 +235,7 @@ fun TransactionListScreen(
                     items = uiState.transactions,
                     key = { it.id }
                 ) { transaction ->
-                    TransactionListItem(
+                    SwipeableTransactionItem(
                         transaction = transaction,
                         onEdit = {
                             navController.navigate("edit_transaction/${transaction.id}")
